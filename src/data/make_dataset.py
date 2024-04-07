@@ -23,7 +23,7 @@ class CustomDataset(Dataset):
         try:
             img_path = self.data.iloc[idx, 1]
             #print("Image Path:", img_path)
-            image = Image.open(r"B:\Projects\Scene_Classifier\src\data"+ img_path).convert('RGB')
+            image = Image.open(r"B:\Projects\Scene_Classifier\src\data\\"+ img_path).convert('RGB')
             # Ensure that images are RGB
             #print(self.data.iloc[:, 1:104].dtypes)
             #print("Missing values in numeric columns:", self.data.iloc[:, 1:104].isnull().sum().sum())

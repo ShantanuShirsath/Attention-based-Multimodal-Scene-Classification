@@ -32,11 +32,11 @@ class train_test(nn.Module):
             Epoch_accuracy = []
             
             for batch_index, data in enumerate(self.trainloader):
-                image,radar, labels = data[0].to(self.device), data[1].to(self.device), data[2].to(self.device)
+                image,sound, labels = data[0].to(self.device), data[1].to(self.device), data[2].to(self.device)
 
                 self.optimizer.zero_grad()
 
-                outputs = self.net(image,radar) # shape: [batch_size, 10]
+                outputs = self.net(image,sound) # shape: [batch_size, 10]
                 correct = torch.sum(labels == torch.argmax(outputs, dim=1)).item()
                 running_accuracy += correct / self.batch_size
 
@@ -100,25 +100,25 @@ class train_test(nn.Module):
             raise CustomException(e,sys)
         
 
-    def test_one_epoch(testloader,device,net,criterion,batch_size):
+    def test_one_epoch(self):
         try:
 
-            net.train(False)
+            self.net.train(False)
             running_loss = 0.0
             running_accuracy = 0.0
 
-            for i, data in enumerate(testloader):
-                image,sound, labels = data[0].to(device), data[1].to(device), data[2].to(device)
+            for i, data in enumerate(self.testloader):
+                image,sound, labels = data[0].to(self.device), data[1].to(self.device), data[2].to(self.device)
 
                 with torch.no_grad():
-                    outputs = net(image,sound) # shape: [batch_size, 10]
+                    outputs = self.net(image,sound) # shape: [batch_size, 10]
                     correct = torch.sum(labels == torch.argmax(outputs, dim=1)).item()
-                    running_accuracy += correct / batch_size
-                    loss = criterion(outputs, labels) # One number, the average batch loss
+                    running_accuracy += correct / self.batch_size
+                    loss = self.criterion(outputs, labels) # One number, the average batch loss
                     running_loss += loss.item()
 
-            avg_loss_across_batches = running_loss / len(testloader)
-            avg_acc_across_batches = (running_accuracy / len(testloader)) * 100
+            avg_loss_across_batches = running_loss / len(self.testloader)
+            avg_acc_across_batches = (running_accuracy / len(self.testloader)) * 100
 
             print('test Loss: {0:.5f}, test Accuracy: {1:.3f}%'.format(avg_loss_across_batches,
                                                                     avg_acc_across_batches))

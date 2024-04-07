@@ -20,14 +20,14 @@ trainloader,testloader,valloader = load_data.load()
 
 
 # Define Network and network parameters
-net = Multimodal_attention()
+net = Multimodal_attention.Multi_Modal_attention()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 criterion = nn.CrossEntropyLoss
-optimizer = torch.optim.Adam(net.paramerters(),lr = 0.00001)
+optimizer = torch.optim.Adam(net.parameters(),lr = 0.00001)
 net.to(device)
 epoch = 20
 
-traintest = train_test(trainloader=trainloader,testloader=testloader,valloader=valloader,net=net,device=device,optimizer=optimizer,criterion=criterion,batch_size = batch_size)
+traintest = train_test.train_test(trainloader=trainloader,testloader=testloader,valloader=valloader,net=net,device=device,optimizer=optimizer,criterion=criterion,batch_size = batch_size)
 
 epoch_loss = []*epoch 
 epoch_Accuracy = []*epoch
